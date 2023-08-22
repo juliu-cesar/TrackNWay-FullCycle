@@ -11,23 +11,17 @@ datasource db {
 }
 
 model Route {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   source      Place
   destination Place
   distance    Float
   duration    Float
   direction   Json
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  RouteDriver RouteDriver[]
 }
-
-// @id - campo responsável pela identificação na tabela
-// @default(auto()) - define o campo para auto incrementável
-// @map("_id") - mapeia o campo para o nome informado (uma vez que o id no MongoDB é tratado como "_id")
-// @db.ObjectId - define que o tipo do id é o 'objectId' do mongoDb
-// @default(now()) - define o valor para o campo com a data atual
-// @updatedAt - sempre que houver uma atualização, esse campo sera atualizado com a data atual
 
 type Place {
   name     String
@@ -37,4 +31,25 @@ type Place {
 type Coord {
   lat Float
   lng Float
+}
+
+// @id - campo responsável pela identificação na tabela
+// @default(auto()) - define o campo para auto incrementável
+// @map("_id") - mapeia o campo para o nome informado (uma vez que o id no MongoDB é tratado como "_id")
+// @db.ObjectId - define que o tipo do id é o 'objectId' do mongoDb
+// @default(now()) - define o valor para o campo com a data atual
+// @updatedAt - sempre que houver uma atualização, esse campo sera atualizado com a data atual
+
+model RouteDriver {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  route      Route    @relation(fields: [route_id], references: [id])
+  route_id   String   @db.ObjectId @unique
+  points     Point[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+type Point {
+  location   Coord
+  created_at DateTime @default(now())
 }
