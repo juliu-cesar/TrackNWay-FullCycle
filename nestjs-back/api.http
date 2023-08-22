@@ -3,8 +3,8 @@ GET http://localhost:3000
 ###
 GET http://localhost:3000/routes
 ###
-GET http://localhost:3000/routes/1
-###
+GET http://localhost:3000/routes/64e4b0b0b131b3279ea4ed87
+### Rota teste
 POST http://localhost:3000/routes
 Content-Type: application/json
 
@@ -13,3 +13,21 @@ Content-Type: application/json
     "source_id": "1",
     "destination_id": "2"
 }
+### Rota Laguna -> Imbituba
+POST http://localhost:3000/routes
+Content-Type: application/json
+
+{
+    "name": "Laguna para Imbituba",
+    "source_id": "ChIJWz6gdKVRIZURC5PVDgd2fpw",
+    "destination_id": "ChIJ09U2kI3KJpURzhSxwj2LKyI"
+}
+
+### ---------- Mapa
+
+### Pegar o place_id
+GET http://localhost:3000/places?text=Av centenário, Criciúma
+### Pegar o place_id
+GET http://localhost:3000/places?text=Imbituba, sc
+### Pegar a direção entre 2 pontos
+GET http://localhost:3000/directions?originId=ChIJbQK4F3aCIZURTp7FvQkQHHs&destinationId=ChIJA9ZasVk7J5URM59o-uEPlqY
