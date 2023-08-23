@@ -1,73 +1,207 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Api TrackNWay
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<div align="center">
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+  <img src="https://nestjs.com/img/logo-small.svg" height="300" />
 
-## Description
+</div>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Sobre
 
-## Installation
+API construída em NestJS para sistema de cadastro de rotas e rastreamento da rota do motoristas, integrado com a poderosa API do Google Maps. Fornecer rastreamento e visualização em tempo real das rotas dos motoristas, e otimização para os trajetos de viagem.
+
+## Tecnologias
+
+- ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
+
+- ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+
+- ![Google Maps](https://img.shields.io/badge/Google_Maps-%23204075?style=for-the-badge&logo=googlemaps&logoColor=white)
+
+- ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
+- ![Swagger_Api_Doc](https://img.shields.io/badge/Swagger_api_doc-%233D6B14?style=for-the-badge&logo=swagger&logoColor=white)
+
+## Documentação
+
+<div align="center">
+
+  <img src="https://github.com/juliu-cesar/VSCode-Landing-page/assets/121033909/ff0655e8-6661-4505-94b6-e73bc1f2839d" height="500" />
+
+</div>
+
+A documentação foi feita utilizando o **Swagger Api**, e pode ser acessada na rota `/api`.
+
+### Rotas
+
+#### POST `/routes`
+
+- request
+
+```json
+{
+  "name": "string",
+  "source_id": "string",
+  "destination_id": "string"
+}
+```
+
+#### GET `/routes`
+
+- response
+
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "source": {
+      "name": "string",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      }
+    },
+    "destination": {
+      "name": "string",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      }
+    },
+    "distance": 0,
+    "duration": 0,
+    "directions": {},
+    "created_at": "2023-08-23T12:12:12.102Z",
+    "updated_at": "2023-08-23T12:12:12.102Z"
+  }
+]
+```
+
+#### GET `/routes/{id}`
+
+- response
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "source": {
+    "name": "string",
+    "location": {
+      "lat": 0,
+      "lng": 0
+    }
+  },
+  "destination": {
+    "name": "string",
+    "location": {
+      "lat": 0,
+      "lng": 0
+    }
+  },
+  "distance": 0,
+  "duration": 0,
+  "directions": {},
+  "created_at": "2023-08-23T12:12:12.102Z",
+  "updated_at": "2023-08-23T12:12:12.102Z"
+}
+```
+
+#### PATCH `/routes/{id}`
+
+- request
+
+```json
+{
+  "name": "string",
+  "source_id": "string",
+  "destination_id": "string"
+}
+```
+
+#### DELETE `/routes/{id}`
+
+- request
+
+```json
+{}
+```
+
+#### GET `/places`
+
+- request
+
+```url
+/places?text=<place_name>
+```
+
+- response
+
+```json
+{
+  "candidates": [
+    {
+      "formatted_address": "string",
+      "geometry": {
+        "location": {
+          "lat": 0,
+          "lng": 0
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 0,
+            "lng": 0
+          },
+          "southwest": {
+            "lat": 0,
+            "lng": 0
+          }
+        }
+      },
+      "name": "string",
+      "place_id": "string"
+    }
+  ],
+  "status": "string"
+}
+```
+
+## Instalação
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Iniciar a aplicação
+
+### Iniciando de dentro do container com _Dev Container_
+
+1. Entre dentro do container utilizando a opção `Open Folder in Container` da extensão _Dev Container_. Em seguida execute o comando:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+### Iniciando de fora do container Docker
+
+1. **Comente** o seguinte trecho de código no arquivo `docker-compose.yaml`:
+
+```yaml
+# app:
+#   build: .
+#   ports:
+#     - "3000:3000"
+#   volumes:
+#     - .:/home/node/app
+```
+
+2. Execute os 3 seguintes comandos:
 
 ```bash
-# unit tests
-$ npm run test
+$ docker compose down --volumes
 
-# e2e tests
-$ npm run test:e2e
+$ docker compose up
 
-# test coverage
-$ npm run test:cov
+$ npm run start:dev
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
