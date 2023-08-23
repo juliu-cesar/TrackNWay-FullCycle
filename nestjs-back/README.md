@@ -199,7 +199,7 @@ $ npm install
 $ npx prisma generate
 ```
 
-Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Caso possua uma chave de api do google maps, insira na variável `GOOGLE_MAPS_API_KEY` do arquivo em questão.
+Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Dentro do arquivo, insira sua **chave de api do google maps** na variável `GOOGLE_MAPS_API_KEY`.
 
 ## Iniciar a aplicação
 
