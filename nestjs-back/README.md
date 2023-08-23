@@ -32,7 +32,29 @@ API construída em NestJS para sistema de cadastro de rotas e rastreamento da ro
 
 A documentação foi feita utilizando o **Swagger Api**, e pode ser acessada na rota `/api`.
 
-### Rotas
+## Criando uma nova rota no mapa
+
+Para criar uma nova rota vamos precisar de 2 `place_id`, o do ponto inicial e o do ponto final da viagem. Vamos seguir os seguintes passos:
+
+1. Na rota da api `GET /places?text=nome_local` atribua ao parâmetro `text` o nome da cidade ou local desejado, em seguida faça a requisição.
+
+2. No objeto de retorno temos o campo `place_id`, copie o valor dele e também o da segunda cidade/local.
+
+3. Agora com os 2 _place_id_, vamos na rota `POST /routes` onde iremos enviar um objeto json com as informações necessárias para criar a rota.
+
+```json
+{
+  "name": "cidade 1 -> cidade 2",
+  "source_id": "<place_id_cidade_1>",
+  "destination_id": "<place_id_cidade_2>"
+}
+```
+
+Pronto, ao efetuar a requisição enviando o objeto json a rota sera cadastrada. Podes listar todos os trajetos criados com a rota da api `GET /routes`.
+
+### Rotas da API
+
+Para criar uma rota no mapa, utilize a rota da api ``
 
 #### POST `/routes`
 
@@ -169,9 +191,15 @@ A documentação foi feita utilizando o **Swagger Api**, e pode ser acessada na 
 
 ## Instalação
 
+Clone o repositório e em seguida execute os seguintes comandos:
+
 ```bash
 $ npm install
+
+$ npx prisma generate
 ```
+
+Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Caso possua uma chave de api do google maps, insira na variável `GOOGLE_MAPS_API_KEY` do arquivo em questão.
 
 ## Iniciar a aplicação
 

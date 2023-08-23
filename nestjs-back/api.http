@@ -22,12 +22,21 @@ Content-Type: application/json
     "source_id": "ChIJWz6gdKVRIZURC5PVDgd2fpw",
     "destination_id": "ChIJ09U2kI3KJpURzhSxwj2LKyI"
 }
+### Rota Criciúma -> Içara
+POST http://localhost:3000/routes
+Content-Type: application/json
+
+{
+    "name": "Laguna para Imbituba",
+    "source_id": "ChIJRdCR0-KBIZURdXbt8FXWM1M",
+    "destination_id": "ChIJS9emok_WI5UR1psNtJQIlBQ"
+}
 
 ### ---------- Mapa
 
 ### Pegar o place_id
-GET http://localhost:3000/places?text=Av centenário, Criciúma
+GET http://localhost:3000/places?text=Criciúma
 ### Pegar o place_id
-GET http://localhost:3000/places?text=Imbituba, sc
+GET http://localhost:3000/places?text=Içara, sc
 ### Pegar a direção entre 2 pontos
 GET http://localhost:3000/directions?originId=ChIJbQK4F3aCIZURTp7FvQkQHHs&destinationId=ChIJA9ZasVk7J5URM59o-uEPlqY
