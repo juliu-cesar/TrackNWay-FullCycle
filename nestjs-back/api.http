@@ -27,10 +27,11 @@ POST http://localhost:3000/routes
 Content-Type: application/json
 
 {
-    "name": "Laguna para Imbituba",
+    "name": "Criciúma -> Içara",
     "source_id": "ChIJRdCR0-KBIZURdXbt8FXWM1M",
     "destination_id": "ChIJS9emok_WI5UR1psNtJQIlBQ"
 }
+
 
 ### ---------- Mapa
 

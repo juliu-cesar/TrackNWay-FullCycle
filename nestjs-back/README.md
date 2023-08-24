@@ -194,9 +194,9 @@ Para criar uma rota no mapa, utilize a rota da api ``
 Clone o repositório e em seguida execute os seguintes comandos:
 
 ```bash
-$ npm install
+npm install
 
-$ npx prisma generate
+npx prisma generate
 ```
 
 Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Dentro do arquivo, insira sua **chave de api do google maps** na variável `GOOGLE_MAPS_API_KEY`.
@@ -208,7 +208,7 @@ Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Dentro do arq
 1. Entre dentro do container utilizando a opção `Open Folder in Container` da extensão _Dev Container_. Em seguida execute o comando:
 
 ```bash
-$ npm run start:dev
+npm run start:dev
 ```
 
 ### Iniciando de fora do container Docker
@@ -227,9 +227,9 @@ $ npm run start:dev
 2. Execute os 3 seguintes comandos:
 
 ```bash
-$ docker compose down --volumes
+docker compose down --volumes
 
-$ docker compose up
+docker compose up
 
-$ npm run start:dev
+npm run start:dev
 ```
