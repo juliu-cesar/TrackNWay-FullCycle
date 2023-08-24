@@ -1,0 +1,19 @@
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/routes
+### Rota teste
+POST http://localhost:3000/routes
+Content-Type: application/json
+
+{
+    "name": "criciuma -> Içara",
+    "source": {
+        "lat": -28.68026484643086, 
+        "lng": -49.36824124069742
+    },
+    "destination": {
+        "lat": -28.716679102867847,         
+        "lng": -49.3018029048672
+    }
+}
