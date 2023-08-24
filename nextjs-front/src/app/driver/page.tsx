@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import useSwr from "swr";
+import { Button, Typography } from "@mui/material";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import { useEffect, useRef } from "react";
+import RouteSelect from "../components/RouteSelect";
 import { useMap } from "../hooks/usemap";
-import { fetcher } from "../utils/http";
 import { Route } from "../utils/model";
+import { socket } from "../utils/socket-io";
 
 interface NewRoutePageProps {}
 
@@ -12,13 +14,12 @@ export default function DriverPage(props: NewRoutePageProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const map = useMap(mapContainerRef);
 
-  const {
-    data: routes,
-    error,
-    isLoading,
-  } = useSwr<Route[]>("http://localhost:3000/routes", fetcher, {
-    fallbackData: [],
-  });
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   async function startRoute() {
     const routeId = (document.getElementById("route") as HTMLSelectElement)
@@ -41,35 +42,35 @@ export default function DriverPage(props: NewRoutePageProps) {
     });
 
     const { steps } = route.directions.routes[0].legs[0];
-    for(const step of steps){
+    for (const step of steps) {
       await sleep(2000);
-      map?.moveCar(routeId, step.start_location)
+      map?.moveCar(routeId, step.start_location);
+      socket.emit("new-points", {
+        route_id: routeId,
+        lat: step.start_location.lat,
+        lng: step.start_location.lng,
+      });
+
       await sleep(2000);
-      map?.moveCar(routeId, step.end_location)
+      map?.moveCar(routeId, step.end_location);
+      socket.emit("new-points", {
+        route_id: routeId,
+        lat: step.end_location.lat,
+        lng: step.end_location.lng,
+      });
     }
   }
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
+    <Grid2
+      container
+      sx={{
         display: "flex",
-        flexDirection: "row",
+        flex: 1,
       }}
     >
-      <div
-        style={{
-          width: "400px",
-          padding: "10px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "10px",
-          borderRight: "2px solid grey",
-        }}
-      >
-        <h2>Minha viagem</h2>
+      <Grid2 xs={4} px={2}>
+        <Typography variant="h4">Minha viagem</Typography>
         <div
           style={{
             width: "100%",
@@ -79,45 +80,22 @@ export default function DriverPage(props: NewRoutePageProps) {
             gap: "10px",
           }}
         >
-          <select
-            name="route"
-            id="route"
-            style={{
-              width: "100%",
-              height: "40px",
-              borderRadius: "4px",
-            }}
-          >
-            {isLoading && <option>Carregando rotas...</option>}
-            {routes!.map((route) => (
-              <option key={route.id} value={route.id}>
-                {route.name}
-              </option>
-            ))}
-          </select>
-          <button
+          <RouteSelect id="route"/>
+          <Button
             onClick={startRoute}
-            style={{
-              width: "70%",
+            variant="contained"
+            sx={{
+              width: "80%",
               height: 50,
-              borderRadius: "8px",
-              fontSize: "1.2rem",
-              fontWeight: 600,
+              fontSize: "1.1rem",
             }}
           >
             Iniciar a viagem
-          </button>
+          </Button>
         </div>
-      </div>
-      <div
-        id="map"
-        ref={mapContainerRef}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      ></div>
-    </div>
+      </Grid2>
+      <Grid2 id="map" ref={mapContainerRef} xs={8}></Grid2>
+    </Grid2>
   );
 }
 

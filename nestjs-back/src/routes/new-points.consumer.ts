@@ -8,7 +8,6 @@ export class NewPointsConsumer {
 
   @Process()
   async handle(job: Job<{ route_id: string; lat: number; lng: number }>) {
-    console.log('Esta sendo executado');
     await this.routesDriverService.createOrUpdate(job.data);
     return {};
   }
