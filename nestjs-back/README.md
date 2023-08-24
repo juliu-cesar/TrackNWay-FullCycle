@@ -34,7 +34,7 @@ A documentação foi feita utilizando o **Swagger Api**, e pode ser acessada na 
 
 ## :gear: Criado com
 
-Para criar um projeto Nest.js com Docker primeiro precisamos verificar se ja temos o Node, o Docker e *cli* do nest. Para instalar o *cli* do Nest utilizamos o comando:
+Para criar um projeto **Nest.js** com **Docker** primeiro precisamos verificar se ja temos o Node, o Docker e *cli* do nest. Para instalar o *cli* do Nest utilizamos o comando:
 
 ```bash
 npm install -g @nestjs/cli
@@ -123,7 +123,40 @@ datasource db {
 }
 ```
 
-Pronto, com isso temos a aplicação Nestjs rodando com o Docker e com a conexão com o MongoDb feita através do Prisma.
+Pronto, com isso temos o básico para iniciar uma aplicação Nestjs com MongoDb. O proximo passo é disponibilizar o serviço do Prisma.
+
+### :file_folder: Criando e disponibilizando o serviço do Prisma
+
+O proximo passo é criar o modulo e o serviço do prisma, para podermos acessar o db através dele. Para isso vamos utilizar os 2 comandos abaixo:
+
+```bash
+npx nest generate module prisma
+
+npx nest generate service prisma/prisma
+```
+
+Com isso o Nest vai criar os arquivos necessarios, e dentro do `prisma.service` vamos adicionar o seguinte código:
+
+```javascript
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  async onModuleInit() {
+    await this.$connect;
+  }
+}
+```
+
+Isso ira iniciar o serviço do prisma assim que a aplicação iniciar. Por fim precisamos expor esse serviço, e fazemos isso indo no arquivo `prisma.module` e adicionando no `exports` o prisma service:
+
+```javascript
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+```
+
+> O `@Global()` serve para criar uma instancia de conexão para toda a aplicação. Dessa forma não é preciso importar o prisma service em todo arquivo que for utiliza-lo.
 
 ### :hash: Criando uma "tabela" no MongoDb
 
@@ -154,6 +187,14 @@ model Route {
 - @default(now()) : define o valor do campo para a data no momento da escrita.
 
 - @updatedAt : define o vapor para a data atual sempre que houver uma atualização.
+
+Após criar o modelo vamos gerar a tipagem do modelo para podermos utilizar ele no projeto com o comando prisma:
+
+```bash
+npx prisma generate
+```
+
+Após todas essas configurações basta criar as rotas da api, mas não iremos abordar isso neste documento.
 
 ## :bookmark_tabs: Criando uma nova rota no mapa
 
