@@ -16,9 +16,13 @@ export default function RouteSelect(props: RouteSelectProps) {
     data: routes,
     error,
     isLoading,
-  } = useSwr<Route[]>("http://localhost:3000/routes", fetcher, {
-    fallbackData: [],
-  });
+  } = useSwr<Route[]>(
+    `${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes`,
+    fetcher,
+    {
+      fallbackData: [],
+    }
+  );
 
   return (
     <NativeSelect

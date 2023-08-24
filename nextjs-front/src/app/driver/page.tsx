@@ -24,7 +24,7 @@ export default function DriverPage(props: NewRoutePageProps) {
   async function startRoute() {
     const routeId = (document.getElementById("route") as HTMLSelectElement)
       .value;
-    const response = await fetch(`http://localhost:3000/routes/${routeId}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes/${routeId}`);
     const route: Route = await response.json();
 
     map?.removeAllRoutes();
@@ -70,7 +70,7 @@ export default function DriverPage(props: NewRoutePageProps) {
       }}
     >
       <Grid2 xs={4} px={2}>
-        <Typography variant="h4">Minha viagem</Typography>
+        <Typography variant="h4" my={2}>Minha viagem</Typography>
         <div
           style={{
             width: "100%",
@@ -80,13 +80,14 @@ export default function DriverPage(props: NewRoutePageProps) {
             gap: "10px",
           }}
         >
-          <RouteSelect id="route"/>
+          <RouteSelect id="route" />
           <Button
             onClick={startRoute}
             variant="contained"
             sx={{
               width: "80%",
               height: 50,
+              my: 1,
               fontSize: "1.1rem",
             }}
           >
@@ -94,7 +95,14 @@ export default function DriverPage(props: NewRoutePageProps) {
           </Button>
         </div>
       </Grid2>
-      <Grid2 id="map" ref={mapContainerRef} xs={8}></Grid2>
+      <Grid2
+        id="map"
+        ref={mapContainerRef}
+        xs={8}
+        sx={{
+          height: "calc(100vh - 64px)",
+        }}
+      ></Grid2>
     </Grid2>
   );
 }

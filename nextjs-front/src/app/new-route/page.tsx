@@ -1,12 +1,10 @@
 "use client";
 
+import styled from "@emotion/styled";
 import type {
   DirectionsResponseData,
   FindPlaceFromTextResponseData,
 } from "@googlemaps/google-maps-services-js";
-import { FormEvent, useRef, useState } from "react";
-import { useMap } from "../hooks/usemap";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import {
   Alert,
   Box,
@@ -14,16 +12,16 @@ import {
   Card,
   CardActions,
   CardContent,
-  FormControl,
-  FormGroup,
   List,
   ListItem,
   ListItemText,
   Snackbar,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import styled from "@emotion/styled";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { FormEvent, useRef, useState } from "react";
+import { useMap } from "../hooks/usemap";
 
 const TextFieldStyled = styled(TextField)`
   div {
@@ -50,8 +48,10 @@ export default function NewRoutePage() {
     ).value;
 
     const [sourceResponse, destinationResponse] = await Promise.all([
-      fetch(`http://localhost:3000/places?text=${source}`),
-      fetch(`http://localhost:3000/places?text=${destination}`),
+      fetch(`${process.env.NEXT_PUBLIC_NEXT_API_URL}/places?text=${source}`),
+      fetch(
+        `${process.env.NEXT_PUBLIC_NEXT_API_URL}/places?text=${destination}`
+      ),
     ]);
 
     const [sourcePlace, destinationPlace]: FindPlaceFromTextResponseData[] =
@@ -72,7 +72,7 @@ export default function NewRoutePage() {
     const placeDestinationsId = destinationPlace.candidates[0].place_id;
 
     const directionsResponse = await fetch(
-      `http://localhost:3000/directions?originId=${placeSourceId}&destinationId=${placeDestinationsId}`
+      `${process.env.NEXT_PUBLIC_NEXT_API_URL}/directions?originId=${placeSourceId}&destinationId=${placeDestinationsId}`
     );
 
     const directionData: DirectionsResponseData & { request: any } =
@@ -96,19 +96,22 @@ export default function NewRoutePage() {
   async function createRoute() {
     const startAddress = directionsData!.routes[0].legs[0].start_address;
     const endAddress = directionsData!.routes[0].legs[0].end_address;
-    const response = await fetch("http://localhost:3000/routes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: `${startAddress} - ${endAddress}`,
-        source_id: directionsData!.request.origin.place_id,
-        destination_id: directionsData!.request.destination.place_id,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: `${startAddress} - ${endAddress}`,
+          source_id: directionsData!.request.origin.place_id,
+          destination_id: directionsData!.request.destination.place_id,
+        }),
+      }
+    );
     const route = await response.json();
-    setOpen(true)
+    setOpen(true);
   }
 
   const classes = {
@@ -122,6 +125,7 @@ export default function NewRoutePage() {
     <Grid2
       container
       sx={{
+        height: "100%",
         display: "flex",
         flex: 1,
       }}
@@ -200,7 +204,14 @@ export default function NewRoutePage() {
           </Card>
         )}
       </Grid2>
-      <Grid2 id="map" ref={mapContainerRef} xs={8}></Grid2>
+      <Grid2
+        id="map"
+        ref={mapContainerRef}
+        xs={8}
+        sx={{
+          height: "calc(100vh - 64px)",
+        }}
+      ></Grid2>
       <Snackbar
         open={open}
         autoHideDuration={3000}

@@ -1,11 +1,10 @@
 "use client";
 
+import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useMap } from "../hooks/usemap";
 import { Route } from "../utils/model";
 import { socket } from "../utils/socket-io";
-import Grid2 from "@mui/material/Unstable_Grid2";
-import { Box } from "@mui/material";
 
 interface NewRoutePageProps {}
 
@@ -21,7 +20,7 @@ export default function AdminPage(props: NewRoutePageProps) {
       async (data: { route_id: string; lat: number; lng: number }) => {
         if (!map?.hasRoute(data.route_id)) {
           const response = await fetch(
-            `http://localhost:3000/routes/${data.route_id}`
+            `${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes/${data.route_id}`
           );
           const route: Route = await response.json();
           map?.removeRoute(data.route_id);
