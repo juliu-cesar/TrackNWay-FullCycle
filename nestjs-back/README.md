@@ -6,11 +6,11 @@
 
 </div>
 
-## Sobre
+## :bulb: Sobre
 
 API construída em NestJS para sistema de cadastro de rotas e rastreamento da rota do motoristas, integrado com a poderosa API do Google Maps. Fornecer rastreamento e visualização em tempo real das rotas dos motoristas, e otimização para os trajetos de viagem.
 
-## Tecnologias
+## :floppy_disk: Tecnologias
 
 - ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
 
@@ -22,7 +22,7 @@ API construída em NestJS para sistema de cadastro de rotas e rastreamento da ro
 
 - ![Swagger_Api_Doc](https://img.shields.io/badge/Swagger_api_doc-%233D6B14?style=for-the-badge&logo=swagger&logoColor=white)
 
-## Documentação
+## :books: Documentação
 
 <div align="center">
 
@@ -32,7 +32,130 @@ API construída em NestJS para sistema de cadastro de rotas e rastreamento da ro
 
 A documentação foi feita utilizando o **Swagger Api**, e pode ser acessada na rota `/api`.
 
-## Criando uma nova rota no mapa
+## :gear: Criado com
+
+Para criar um projeto Nest.js com Docker primeiro precisamos verificar se ja temos o Node, o Docker e *cli* do nest. Para instalar o *cli* do Nest utilizamos o comando:
+
+```bash
+npm install -g @nestjs/cli
+```
+
+1. Para criar o projeto Nest utilizamos o comando:
+
+```bash
+nest new nome_do_projeto
+```
+
+Com isso podemos até rodar o `npm run start:dev` para executar a aplicação. Agora vamos para o Docker.
+
+2. Sera necessario criar 2 arquivos na raiz do projeto, o `Dockerfile` e o `docker-compose.yaml`. Dentre do primeiro vamos adicionar os seguintes códigos:
+
+```yaml
+FROM node:20-slim
+
+WORKDIR /home/node/app
+
+USER node
+
+CMD [ "tail", "-f", "/dev/null"]
+```
+
+Já para o arquivo `yaml` vamos configurar a aplicação e o banco de dados MongoDb:
+
+```yaml
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/node/app
+
+  db:
+    image: bitnami/mongodb:5.0.17
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+    environment:
+      MONGODB_ROOT_PASSWORD: root
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_KEY: 123456
+      MONGODB_DATABASE: nest-full
+
+volumes:
+  mongodb_data:
+    driver: local
+```
+
+Com isso podemos tanto rodar um `docker compose up --build` para rodar o container e, em outro shell executar o `docker compose exec app bash` para abrir o bash da aplicação, onde podemos iniciar a aplicação com o mesmo `npm run start:dev`. Porem utilizando a extensão **Dev Container** podemos executar o Vs Code de dentro do container, o que simplifica muito, pois ao entrar no container com a extensão o container ja estará rodando, então temos o terminal do Vs Code para executar todos os comandos.
+
+3. Vamos instalar agora o **Prisma** e iniciar o projeto prisma:
+
+```bash
+npm install @prisma/client
+
+npx prisma init
+```
+
+Sera criado tanto a pasta do Prisma como o arquivo `.env` com a variável de conexão com o banco de dados.
+
+4. Dentro do arquivo `.env` vamos configurar a variável para o mongoDb:
+
+```env
+DATABASE_URL="mongodb://root:root@db:27017/nest-full?authSource=admin"
+```
+
+> As informações na url de conexão varia de acordo com a configuração do MongoDb no Docker.
+
+5. Editando o *schema* do prisma
+
+Para facilitar a edição do arquivo prisma, baixe a extensão [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma). Após instalar a extensão, vamos adicionar o seguinte trecho de código no arquivo `schema.prisma`:
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+```
+
+Pronto, com isso temos a aplicação Nestjs rodando com o Docker e com a conexão com o MongoDb feita através do Prisma.
+
+### :hash: Criando uma "tabela" no MongoDb
+
+Apesar de estarmos utilizando um banco de dados NoSql, criamos a collection no Mongo igual uma tabela. Vamos criar o modelo `Route` para o nosso projeto:
+
+```prisma
+model Route {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  source      Place
+  destination Place
+  distance    Float
+  duration    Float
+  direction   Json
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+}
+```
+
+- @id: define o *id* da coleção.
+
+- @default(auto()) : define que o valor do campo sera gerado automaticamente pelo Mongo
+
+- @db.ObjectId : define que sera o tipo padrão de *id* utilizado pelo MongoDb.
+
+- @map("_id") : mapeia esse campo para o nome `_id` no db. Com isso na aplicação utilizamos `id` mas no mongo sera armazenado como `_id`, uma vez que esse é o nome padrão para o Mongo.
+
+- @default(now()) : define o valor do campo para a data no momento da escrita.
+
+- @updatedAt : define o vapor para a data atual sempre que houver uma atualização.
+
+## :bookmark_tabs: Criando uma nova rota no mapa
 
 Para criar uma nova rota vamos precisar de 2 `place_id`, o do ponto inicial e o do ponto final da viagem. Vamos seguir os seguintes passos:
 
@@ -52,7 +175,7 @@ Para criar uma nova rota vamos precisar de 2 `place_id`, o do ponto inicial e o 
 
 Pronto, ao efetuar a requisição enviando o objeto json a rota sera cadastrada. Podes listar todos os trajetos criados com a rota da api `GET /routes`.
 
-### Rotas da API
+### :electric_plug: Rotas da API
 
 Para criar uma rota no mapa, utilize a rota da api ``
 
@@ -189,7 +312,7 @@ Para criar uma rota no mapa, utilize a rota da api ``
 }
 ```
 
-## Instalação
+## :computer: Instalação
 
 Clone o repositório e em seguida execute os seguintes comandos:
 
@@ -201,7 +324,7 @@ npx prisma generate
 
 Apos isso **renomeie** o arquivo `.env.sample` para apenas `.env`. Dentro do arquivo, insira sua **chave de api do google maps** na variável `GOOGLE_MAPS_API_KEY`.
 
-## Iniciar a aplicação
+## :keyboard: Iniciar a aplicação
 
 ### Iniciando de dentro do container com _Dev Container_
 
