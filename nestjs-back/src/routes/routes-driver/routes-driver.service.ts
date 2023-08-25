@@ -3,12 +3,18 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { PrismaService } from 'src/prisma/prisma/prisma.service';
+import { Counter } from 'prom-client';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
 
 @Injectable()
 export class RoutesDriverService {
   constructor(
     private prismaService: PrismaService,
     @InjectQueue('kafka-producer') private kafkaProducerQueue: Queue,
+    @InjectMetric('route_started_counter')
+    private routeStartedCounter: Counter,
+    @InjectMetric('route_finished_counter')
+    private routeFinishedCounter: Counter,
   ) {}
 
   async createOrUpdate(dto: { route_id: string; lat: number; lng: number }) {
@@ -49,6 +55,7 @@ export class RoutesDriverService {
     });
 
     if (countRouteDriver === 0) {
+      this.routeStartedCounter.inc();
       await this.kafkaProducerQueue.add({
         event: 'RouteStarted',
         id: routeDriver.route_id,
@@ -73,6 +80,7 @@ export class RoutesDriverService {
       lastPoint.end_location.lat === dto.lat &&
       lastPoint.end_location.lng === dto.lng
     ) {
+      this.routeFinishedCounter.inc();
       await this.kafkaProducerQueue.add({
         event: 'RouteFinished',
         id: routeDriver.route_id,

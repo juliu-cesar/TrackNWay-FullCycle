@@ -1,13 +1,14 @@
-import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { MapsModule } from 'src/maps/maps.module';
-import { NewPointsJob } from './new-points.job';
-import { RouteKafkaProducerJob } from './route-kafka-producer.job';
-import { RoutesDriverService } from './routes-driver/routes-driver.service';
-import { RoutesController } from './routes.controller';
 import { RoutesService } from './routes.service';
+import { RoutesController } from './routes.controller';
+import { MapsModule } from 'src/maps/maps.module';
+import { RoutesDriverService } from './routes-driver/routes-driver.service';
 import { RoutesGateway } from './routes/routes.gateway';
+import { BullModule } from '@nestjs/bull';
+import { NewPointsJob } from './new-points.job';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RouteKafkaProducerJob } from './route-kafka-producer.job';
+import { makeCounterProvider } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -36,6 +37,14 @@ import { RoutesGateway } from './routes/routes.gateway';
     RoutesGateway,
     NewPointsJob,
     RouteKafkaProducerJob,
+    makeCounterProvider({
+      name: 'route_started_counter',
+      help: 'Numero de rotas iniciadas.',
+    }),
+    makeCounterProvider({
+      name: 'route_finished_counter',
+      help: 'Numero de rotas finalizadas.',
+    }),
   ],
 })
 export class RoutesModule {}
