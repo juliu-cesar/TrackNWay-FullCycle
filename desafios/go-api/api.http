@@ -1,0 +1,32 @@
+GET http://localhost:8080/routes
+
+###
+POST http://localhost:8080/routes
+Content-Type: "application/json"
+
+{
+    "name": "Criciuma para Içara",
+    "source": {
+        "lat": -28.68038083465659,
+        "lng": -49.36799883715713
+    },
+    "destination": {
+        "lat": -28.716692305358777,
+        "lng": -49.3017994106172
+    }
+}
+###
+POST http://localhost:8080/routes
+Content-Type: "application/json"
+
+{
+    "name": "Criciuma para Balneario Rincão",
+    "source": {
+        "lat": -28.68038083465659,
+        "lng": -49.36799883715713
+    },
+    "destination": {
+        "lat": -28.823514740016154,
+        "lng": -49.21734462699129
+    }
+}
