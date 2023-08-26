@@ -51,7 +51,7 @@ export class RoutesService {
       },
     });
 
-    // this.kafkaService.emit('route', {
+    // this.kafkaService.emit('routes', {
     //   event: 'RouteCreated',
     //   id: routeCreated.id,
     //   name: routeCreated.name,

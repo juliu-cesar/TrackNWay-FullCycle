@@ -12,7 +12,7 @@ export class RouteKafkaProducerJob {
 
   @Process()
   async handle(job: Job<any>) {
-    this.kafkaService.emit('route', job.data);
+    this.kafkaService.emit('routes', job.data);
     return {};
   }
 }
